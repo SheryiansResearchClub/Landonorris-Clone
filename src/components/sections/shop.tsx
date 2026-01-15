@@ -1,50 +1,23 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useScrollReveal } from '../../hooks/use-scroll-reveal';
 
 const Shop: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Text animation
-      gsap.from(textRef.current, {
-        x: -100,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-        }
-      });
+  useScrollReveal({
+    ref: sectionRef,
+    stagger: 0.2,
+  });
 
-      // Image animation
-      gsap.from(imageRef.current, {
-        x: 100,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-        }
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section ref={sectionRef} className="w-full py-24 bg-ln-cream text-ln-dark overflow-hidden">
+    <section ref={sectionRef} className="reveal-container w-full py-24 bg-ln-cream text-ln-dark overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
           {/* Text Content */}
-          <div ref={textRef} className="relative z-10">
+          <div className="reveal-item relative z-10">
             <div className="flex items-center gap-2 mb-4">
               <span className="w-2 h-2 bg-black rounded-full animate-pulse"></span>
               <span className="text-xs font-bold uppercase tracking-widest">Lando Store</span>
@@ -62,7 +35,7 @@ const Shop: React.FC = () => {
           </div>
 
           {/* Image Collage */}
-          <div ref={imageRef} className="relative h-[500px] md:h-[600px] w-full">
+          <div className="reveal-item relative h-[500px] md:h-[600px] w-full">
             {/* Main Image */}
             <div className="absolute top-0 right-0 w-[85%] md:w-[80%] h-[75%] md:h-[80%] bg-gray-200 z-10 rounded-lg overflow-hidden shadow-xl">
               <img src="/images/horizontal/victory-lane.webp" loading="lazy" className="w-full h-full object-cover" alt="Merch Main" />

@@ -15,6 +15,8 @@
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@tailwindcss/vite": "^4.1.18",
+    "aos": "^2.3.4",
+    "framer-motion": "^12.26.2",
     "gsap": "^3.14.2",
     "lucide-react": "^0.562.0",
     "pixi.js": "^8.15.0",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/aos": "^3.0.7",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",

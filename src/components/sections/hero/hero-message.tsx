@@ -16,52 +16,62 @@ const HeroMessage: React.FC<HeroMessageProps> = ({ containerRef }) => {
   useGSAP(() => {
     if (!containerRef.current) return;
 
-    // Reveal message and signature on scroll
+    // Initial Appearance (Entrance)
     if (messageRef.current) {
       gsap.fromTo(messageRef.current,
-        {
-          opacity: 0,
-          y: 50,
-          scale: 0.9,
-        },
+        { opacity: 0, y: 50, scale: 0.9 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: '+=200%',
-            scrub: 1,
-          }
+          duration: 1.2,
+          ease: 'power3.out',
+          delay: 0.5,
         }
       );
+
+      // Scroll Exit Effect
+      gsap.to(messageRef.current, {
+        y: -100,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: '+=40%',
+          scrub: 1,
+        }
+      });
     }
 
     if (signatureRef.current) {
       gsap.fromTo(signatureRef.current,
-        {
-          opacity: 0,
-          scale: 0.8,
-          rotation: -5,
-        },
+        { opacity: 0, scale: 0.8, rotation: -5 },
         {
           opacity: 1,
           scale: 1,
           rotation: 0,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: '+=200%',
-            scrub: 1,
-          }
+          duration: 1.2,
+          ease: 'power3.out',
+          delay: 0.7,
         }
       );
+
+      // Scroll Exit Effect
+      gsap.to(signatureRef.current, {
+        y: -150,
+        opacity: 0,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: '+=40%',
+          scrub: 1,
+        }
+      });
     }
   }, { scope: containerRef });
 
   return (
-    <div 
+    <div
       ref={messageRef}
       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center gap-6 opacity-0 pointer-events-none"
     >

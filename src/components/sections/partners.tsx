@@ -1,29 +1,17 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef } from 'react';
+import { useScrollReveal } from '../../hooks/use-scroll-reveal';
 
 const Partners: React.FC = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
-    const logosRef = useRef<(HTMLDivElement | null)[]>([]);
+    const gridRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const ctx = gsap.context(() => {
-            // Animate logos on scroll
-            gsap.from(logosRef.current, {
-                y: 50,
-                opacity: 0,
-                stagger: 0.1,
-                duration: 0.8,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: 'top 70%',
-                }
-            });
-        }, sectionRef);
+    useScrollReveal({
+        ref: gridRef,
+        stagger: 0.1,
+        trigger: sectionRef, // Trigger when section comes into view
+        start: 'top 80%',
+    });
 
-        return () => ctx.revert();
-    }, []);
 
     const partners = [
         { name: 'Ralph Lauren', logo: '/images/logos-icons/ralph-lauren.svg' },
@@ -56,12 +44,11 @@ const Partners: React.FC = () => {
                 </div>
 
                 {/* Logos Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 items-center">
+                <div ref={gridRef} className="reveal-container grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 items-center">
                     {partners.map((partner, idx) => (
                         <div
                             key={idx}
-                            ref={el => { logosRef.current[idx] = el }}
-                            className="flex justify-center items-center h-16 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
+                            className="reveal-item flex justify-center items-center h-16 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 cursor-pointer"
                         >
                             <img
                                 src={partner.logo}

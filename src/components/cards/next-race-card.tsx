@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 interface NextRaceCardProps {
     className?: string;
 }
 
 const NextRaceCard: React.FC<NextRaceCardProps> = ({ className }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+
+    useGSAP(() => {
+        gsap.from(cardRef.current, {
+            x: -50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out',
+            delay: 1,
+        });
+    }, { scope: cardRef });
+
     return (
-        <div className={`hero-info-card ${className}`}>
+        <div ref={cardRef} className={`hero-info-card ${className}`}>
             <p className="text-[0.6rem] font-black uppercase tracking-[0.3em] text-[#1F2323]/40 mb-[1rem] ml-[0.5rem]">Next Race</p>
             <div
                 className="relative w-[11rem] h-[15rem] bg-white border border-[#1F2323]/5 flex flex-col items-center justify-between py-[1.5rem] px-[1rem] shadow-xl"

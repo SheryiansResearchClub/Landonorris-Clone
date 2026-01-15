@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
 
 @font-face {
     font-family: 'Brier';
@@ -46,6 +47,7 @@
     /* Custom font aliases */
     --font-display: 'Mona Sans Variable';
     --font-brier: 'Brier';
+    --font-script: 'Yellowtail', cursive;
 
     --background-image-noise: url('/images/noise.svg');
 }
@@ -67,7 +69,7 @@
     }
 
     .stroke-text-dark {
-        -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2);
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
         color: transparent;
     }
 

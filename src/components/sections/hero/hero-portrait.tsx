@@ -9,9 +9,20 @@ interface HeroPortraitProps {
 
 const HeroPortrait: React.FC<HeroPortraitProps> = ({ containerRef }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<PIXI.Application | null>(null);
   const initializedRef = useRef<boolean>(false);
   const [imagesLoaded, setImagesLoaded] = useState<boolean>(false);
+
+  useGSAP(() => {
+    gsap.from(wrapperRef.current, {
+      opacity: 0,
+      scale: 0.95,
+      duration: 1.5,
+      ease: "power2.out",
+      delay: 0.2
+    });
+  }, { scope: wrapperRef });
 
   useEffect(() => {
     if (!containerRef.current || !canvasRef.current || initializedRef.current) return;
@@ -77,17 +88,17 @@ const HeroPortrait: React.FC<HeroPortraitProps> = ({ containerRef }) => {
       // Continuous liquid wave animation - more subtle
       const animateLiquid = () => {
         waveOffset += 0.015; // Slower
-        
+
         // Subtle wave patterns
         const wave1X = Math.sin(waveOffset) * 8; // Reduced from 20
         const wave1Y = Math.cos(waveOffset * 0.7) * 6; // Reduced from 15
         const wave2X = Math.sin(waveOffset * 1.3) * 5; // Reduced from 12
         const wave2Y = Math.cos(waveOffset * 0.9) * 4; // Reduced from 10
-        
+
         // Combine mouse position with waves
         const finalX = targetX + wave1X + wave2X;
         const finalY = targetY + wave1Y + wave2Y;
-        
+
         // Smooth interpolation for liquid feel
         displacementFilter.scale.x += (finalX - displacementFilter.scale.x) * 0.08; // Slower interpolation
         displacementFilter.scale.y += (finalY - displacementFilter.scale.y) * 0.08;
@@ -98,10 +109,10 @@ const HeroPortrait: React.FC<HeroPortraitProps> = ({ containerRef }) => {
 
       const handleMouseMove = (e: MouseEvent) => {
         if (!containerRef.current) return;
-        
+
         const rect = containerRef.current.getBoundingClientRect();
         const { clientX, clientY } = e;
-        
+
         // Calculate target position - more subtle movement
         targetX = ((clientX - rect.left) / rect.width - 0.5) * 40; // Reduced from 80
         targetY = ((clientY - rect.top) / rect.height - 0.5) * 25; // Reduced from 50
@@ -110,12 +121,12 @@ const HeroPortrait: React.FC<HeroPortraitProps> = ({ containerRef }) => {
       // Add subtle ripple effect on mouse click
       const handleMouseClick = (e: MouseEvent) => {
         if (!containerRef.current) return;
-        
+
         const rect = containerRef.current.getBoundingClientRect();
         const { clientX, clientY } = e;
         const clickX = ((clientX - rect.left) / rect.width - 0.5) * 40;
         const clickY = ((clientY - rect.top) / rect.height - 0.5) * 25;
-        
+
         // Create subtle ripple effect
         gsap.fromTo(displacementFilter.scale,
           {
@@ -162,7 +173,7 @@ const HeroPortrait: React.FC<HeroPortraitProps> = ({ containerRef }) => {
   }, []);
 
   return (
-    <div className="relative z-20 h-full flex items-end w-full max-w-[100rem]">
+    <div ref={wrapperRef} className="relative z-20 h-full flex items-end w-full max-w-[100rem]">
       <div
         ref={canvasRef}
         className="w-full h-full flex items-end justify-center select-none pointer-events-none"

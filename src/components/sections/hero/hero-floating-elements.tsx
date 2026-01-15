@@ -6,6 +6,14 @@ const HeroFloatingElements: React.FC = () => {
   const floatingElementsRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    // Entrance fade in
+    gsap.from(floatingElementsRef.current, {
+      opacity: 0,
+      duration: 2,
+      ease: 'power2.out',
+      delay: 0.5,
+    });
+
     // Floating playful elements animation
     if (floatingElementsRef.current) {
       const elements = floatingElementsRef.current.children;
@@ -18,7 +26,7 @@ const HeroFloatingElements: React.FC = () => {
           repeat: -1,
           yoyo: true,
           ease: 'sine.inOut',
-          delay: i * 0.2,
+          delay: i * 0.2, // This delay is for the start of the yoyo loop, which is fine
         });
       });
     }

@@ -1,117 +1,92 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { CornerDownRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useScrollReveal } from '../../hooks/use-scroll-reveal';
 
 const TrackMode: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const onTrackRef = useRef<HTMLDivElement>(null);
-  const offTrackRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(onTrackRef.current, {
-        x: -100,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-        }
-      });
 
-      gsap.from(offTrackRef.current, {
-        x: 100,
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-        }
-      });
-    }, sectionRef);
+  // Use the new premium reveal hook
+  useScrollReveal({
+    ref: sectionRef,
+    stagger: 0.2, // Stagger the children
+  });
 
-    return () => ctx.revert();
-  }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full py-24 bg-ln-cream text-ln-dark overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+    <section ref={sectionRef} className="reveal-container relative w-full bg-ln-cream text-ln-dark min-h-screen py-24 overflow-hidden flex items-center justify-center">
 
-        {/* On Track - Left Side */}
-        <div ref={onTrackRef} className="flex flex-col items-center group cursor-pointer relative hover:scale-105 transition-transform duration-500">
+      {/* Topographic Lines Background */}
+      <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none">
+        <svg viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full object-cover">
+          <path d="M-100 150C100 100 300 300 500 250C700 200 900 400 1100 350C1300 300 1500 500 1700 450" stroke="black" strokeWidth="0.5" />
+          <path d="M-100 350C100 300 300 500 500 450C700 400 900 600 1100 550C1300 500 1500 700 1700 650" stroke="black" strokeWidth="0.5" />
+          <path d="M-100 550C100 500 300 700 500 650C700 600 900 800 1100 750C1300 700 1500 900 1700 850" stroke="black" strokeWidth="0.5" />
+          <path d="M-100 750C100 700 300 900 500 850C700 800 900 1000 1100 950C1300 900 1500 1100 1700 1050" stroke="black" strokeWidth="0.5" />
+        </svg>
+      </div>
 
-          {/* Typography */}
-          <div className="relative mb-12 text-center">
-            <span className="absolute -top-8 left-[40%] font-script text-6xl text-ln-yellow z-20 rotate-[-12deg] mix-blend-multiply opacity-90">On</span>
-            <h3 className="font-display font-bold text-7xl md:text-[8rem] leading-[0.8] tracking-tighter uppercase relative z-10">
+      <div className="w-full max-w-[1440px] mx-auto relative z-20 flex flex-col md:flex-row items-center justify-center h-full gap-4 md:gap-0">
+
+        {/* On Track - Left Inner Content */}
+        <div className="reveal-item flex flex-col items-center text-center w-full md:w-1/2 px-4 md:px-12 mt-12 md:mt-0">
+          <div className="relative mb-8">
+            <span className="absolute -top-8 -left-10 md:-top-12 md:-left-12 font-script text-7xl md:text-9xl text-ln-yellow z-30 -rotate-12 pointer-events-none">On</span>
+            <h3 className="font-display font-bold text-6xl md:text-8xl lg:text-[8.5rem] leading-none tracking-tighter uppercase relative z-20 text-ln-dark drop-shadow-sm">
               Track
             </h3>
-            <p className="font-sans text-sm text-gray-600 mt-6 max-w-xs mx-auto">
-              Most recent results, career stats and photos from trackside.
-            </p>
-            <div className="mt-4 flex justify-center">
-              <button className="w-10 h-10 bg-ln-yellow rounded-lg flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                <CornerDownRight size={20} className="text-black" />
-              </button>
-            </div>
           </div>
-
-          {/* Image - Helmet */}
-          <div className="w-full aspect-[4/5] relative">
-            <div className="absolute inset-0 bg-gray-200 rounded-sm overflow-hidden transform transition-transform duration-700 group-hover:scale-[1.02]">
-              <img src="/images/on-off-track/left.webp" loading="lazy" className="w-full h-full object-cover object-center" alt="Helmet" />
-            </div>
-            {/* Decorative element */}
-            <div className="absolute top-10 -left-10 bg-white p-2 rounded shadow-md z-20 hidden md:block">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold">Lando Norris</span>
-              </div>
-            </div>
-          </div>
+          <p className="font-sans text-xs md:text-sm text-gray-700 max-w-[240px] mx-auto font-medium leading-relaxed opacity-80">
+            Most recent results, career stats and photos from trackside.
+          </p>
+          <button className="mt-10 w-12 h-12 bg-ln-yellow rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg group/btn active:scale-95">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="transform -rotate-45">
+              <path d="M7 17l9.2-9.2M17 17V7H7" />
+            </svg>
+          </button>
         </div>
 
-        {/* Off Track - Right Side */}
-        <div ref={offTrackRef} className="flex flex-col items-center group cursor-pointer relative mt-12 md:mt-0 hover:scale-105 transition-transform duration-500">
-
-          {/* Typography */}
-          <div className="relative mb-12 text-center">
-            <span className="absolute -top-10 left-[45%] font-script text-6xl text-ln-yellow z-20 rotate-[5deg] mix-blend-multiply opacity-90">Off</span>
-            <div className="flex flex-col items-center">
-              <span className="font-serif italic text-6xl md:text-7xl leading-none">OFF</span>
-              <h3 className="font-display font-bold text-7xl md:text-[8rem] leading-[0.7] tracking-tighter uppercase relative z-10">
-                Track
-              </h3>
-            </div>
-            <p className="font-sans text-sm text-gray-600 mt-6 max-w-xs mx-auto">
-              Campaigns, shoots and other such promotional materials for fans.
-            </p>
-            <div className="mt-4 flex justify-center">
-              <button className="w-10 h-10 bg-ln-yellow rounded-lg flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
-                <CornerDownRight size={20} className="text-black" />
-              </button>
-            </div>
+        {/* Off Track - Right Inner Content */}
+        <div className="reveal-item flex flex-col items-center text-center w-full md:w-1/2 px-4 md:px-12 mt-12 md:mt-0">
+          <div className="relative mb-8">
+            <span className="absolute -top-6 -left-8 md:-top-10 md:-left-10 font-serif italic text-6xl md:text-8xl text-ln-dark/30 z-30 -rotate-6 pointer-events-none">OFF</span>
+            <h3 className="font-display font-bold text-6xl md:text-8xl lg:text-[8.5rem] leading-none tracking-tighter uppercase relative z-20 text-ln-dark drop-shadow-sm">
+              Track
+            </h3>
           </div>
-
-          {/* Image - Lifestyle */}
-          <div className="w-full aspect-[4/5] relative">
-            <div className="absolute inset-0 bg-gray-200 rounded-sm overflow-hidden transform transition-transform duration-700 group-hover:scale-[1.02]">
-              <img src="/images/on-off-track/right.webp" loading="lazy" className="w-full h-full object-cover object-top" alt="Lifestyle" />
-            </div>
-          </div>
-
+          <p className="font-sans text-xs md:text-sm text-gray-700 max-w-[240px] mx-auto font-medium leading-relaxed opacity-80">
+            Campaigns, shoots and other such promotional materials for fans.
+          </p>
+          <button className="mt-10 w-12 h-12 bg-ln-yellow rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg group/btn active:scale-95">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="transform -rotate-45">
+              <path d="M7 17l9.2-9.2M17 17V7H7" />
+            </svg>
+          </button>
         </div>
 
       </div>
 
-      {/* Background Graphic Lines */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20 z-0">
-        <svg viewBox="0 0 1440 800" fill="none" stroke="black" strokeWidth="0.5">
-          <path d="M0 400 Q 720 100 1440 400" />
-          <path d="M0 600 Q 720 300 1440 600" />
-        </svg>
+      {/* Side Framing Portraits */}
+      {/* Left Frame (Helmet Profile) */}
+      <div className="hidden lg:block absolute left-0 bottom-0 w-[28vw] max-w-[600px] h-full z-10 pointer-events-none overflow-hidden select-none">
+        <img
+          src="/images/on-off-track/left.webp"
+          className="w-full h-full object-contain object-left-bottom grayscale opacity-90"
+          alt="Lando Helmet Profile"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ln-cream via-transparent to-transparent h-1/3 bottom-0 top-auto"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-ln-cream w-1/4 right-0 left-auto"></div>
+      </div>
+
+      {/* Right Frame (Lando Face) */}
+      <div className="hidden lg:block absolute right-0 bottom-0 w-[28vw] max-w-[600px] h-full z-10 pointer-events-none overflow-hidden select-none">
+        <img
+          src="/images/on-off-track/right.webp"
+          className="w-full h-full object-contain object-right-bottom grayscale opacity-90"
+          alt="Lando Face Profile"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ln-cream via-transparent to-transparent h-1/3 bottom-0 top-auto"></div>
+        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-ln-cream w-1/4 left-0 right-auto"></div>
       </div>
     </section>
   );
